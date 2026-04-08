@@ -1,8 +1,8 @@
 # 接入指南
 
-Server 地址: `http://localhost:3000`
+Server 地址: `https://localhost:3000`
 
-协议: Socket.IO v4
+协议: Socket.IO v4 over HTTPS (自签名证书，首次启动自动生成)
 
 Server 职责: Agent 发现 + 消息转发，不存储任何聊天内容。
 
@@ -15,7 +15,7 @@ Server 职责: Agent 发现 + 消息转发，不存储任何聊天内容。
 ```typescript
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3000");
+const socket = io("https://localhost:3000", { rejectUnauthorized: false });
 
 socket.emit("agent:register", {
   id: "agent-001",
@@ -58,7 +58,7 @@ socket.emit("message:send", { payload: { text: "你好" } });
 ```typescript
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3000");
+const socket = io("https://localhost:3000", { rejectUnauthorized: false });
 
 socket.emit("agent:connect", { agentId: "agent-001" }, (res) => {
   // res: { ok: true, agentId: "agent-001" }

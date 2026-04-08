@@ -1,9 +1,9 @@
 import { io } from "socket.io-client";
 
-const SERVER = process.env.SERVER || "http://localhost:3000";
+const SERVER = process.env.SERVER || "https://localhost:3000";
 const AGENT_ID = process.env.AGENT_ID || "agent-001";
 
-const socket = io(SERVER);
+const socket = io(SERVER, { rejectUnauthorized: false });
 
 socket.on("connect", () => {
   console.log("[client] connected:", socket.id);

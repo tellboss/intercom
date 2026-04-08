@@ -6,7 +6,7 @@ import { handleRequest } from "./routes";
 const PORT = Number(process.env.PORT) || 3000;
 
 const httpServer = createServer((req, res) => {
-  const url = `http://localhost:${PORT}${req.url}`;
+  const url = `http://0.0.0.0:${PORT}${req.url}`;
   const response = handleRequest(new Request(url, { method: req.method }));
 
   if (response) {

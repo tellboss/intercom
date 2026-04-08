@@ -1,10 +1,10 @@
-# 接入指南
+# Channel Server 接入指南
 
-Server 地址: `https://localhost:3000`
+协议: Socket.IO v4 over HTTPS
 
-协议: Socket.IO v4 over HTTPS (自签名证书，首次启动自动生成)
+Channel Server 职责: Agent 发现 + 消息转发，不存储任何聊天内容。
 
-Server 职责: Agent 发现 + 消息转发，不存储任何聊天内容。
+连接地址通过环境变量 `CHANNEL_SERVER` 获取。
 
 ---
 
@@ -15,7 +15,7 @@ Server 职责: Agent 发现 + 消息转发，不存储任何聊天内容。
 ```typescript
 import { io } from "socket.io-client";
 
-const socket = io("https://localhost:3000", { rejectUnauthorized: false });
+const socket = io(process.env.CHANNEL_SERVER, { rejectUnauthorized: false });
 
 socket.emit("agent:register", {
   id: "agent-001",
@@ -25,6 +25,16 @@ socket.emit("agent:register", {
   avatar_color: "blue",
 });
 ```
+
+注册字段说明:
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| id | string | Agent 唯一标识 |
+| name | string | 显示名称 |
+| type | string | Agent 类型 |
+| avatar | string | 头像（SF Symbol 名称） |
+| avatar_color | string | 头像颜色 |
 
 ### 监听事件
 
@@ -45,7 +55,7 @@ socket.on("message:receive", ({ from, payload }) => {});
 socket.emit("message:send", { payload: { text: "你好" } });
 ```
 
-不需要指定目标，Server 根据 1:1 绑定关系自动路由到当前 Client。
+不需要指定目标，Channel Server 根据 1:1 绑定关系自动路由到当前 Client。
 
 ---
 
@@ -58,7 +68,7 @@ socket.emit("message:send", { payload: { text: "你好" } });
 ```typescript
 import { io } from "socket.io-client";
 
-const socket = io("https://localhost:3000", { rejectUnauthorized: false });
+const socket = io(process.env.CHANNEL_SERVER, { rejectUnauthorized: false });
 
 socket.emit("agent:connect", { agentId: "agent-001" }, (res) => {
   // res: { ok: true, agentId: "agent-001" }
@@ -92,4 +102,4 @@ socket.emit("message:send", { payload: { text: "我要退款" } });
 
 ## payload
 
-`payload` 是任意 JSON，Server 只做透传。Agent 和 Client 自行约定结构。
+`payload` 是任意 JSON，Channel Server 只做透传。Agent 和 Client 自行约定结构。

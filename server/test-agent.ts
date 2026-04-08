@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const SERVER = process.env.SERVER || "https://localhost:3000";
+const SERVER = process.env.SERVER || "https://47.116.5.76";
 
 const socket = io(SERVER, { rejectUnauthorized: false });
 
